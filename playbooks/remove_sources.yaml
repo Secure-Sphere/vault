@@ -1,0 +1,21 @@
+- name: Remove Docker repository and Docker packages
+  hosts: vault_server
+  become: yes  # This will execute tasks with sudo privileges
+
+  tasks:
+    - name: Remove Docker repository
+      apt_repository:
+        repo: "deb [signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+        state: absent
+      become: yes
+
+    - name: Remove Docker packages
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: absent
+      become: yes
